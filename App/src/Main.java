@@ -1,36 +1,33 @@
 /**
  * =============================================================
- * MAIN CLASS - UseCase7AddOnServiceSelection
+ * MAIN CLASS - UseCase8BookingHistoryReport
  * =============================================================
  *
- * Use Case 7: Add-On Service Selection
+ * Use Case 8: Booking History & Reporting
  *
- * @version 7.0
+ * @version 8.0
  */
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("Add-On Service Selection");
+        System.out.println("Booking History & Report\n");
 
-        // Example reservation ID (from UC6)
-        String reservationId = "Single-1";
+        // Booking history
+        BookingHistory history = new BookingHistory();
 
-        // Service manager
-        AddOnServiceManager manager = new AddOnServiceManager();
+        // Simulate confirmed bookings (from UC6)
+        history.addBooking(new Reservation("Abhi", "Single"));
+        history.addBooking(new Reservation("Subha", "Single"));
+        history.addBooking(new Reservation("Vanmathi", "Suite"));
 
-        // Create services
-        AddOnService breakfast = new AddOnService("Breakfast", 500.0);
-        AddOnService spa = new AddOnService("Spa", 1000.0);
+        // Report service
+        BookingReportService reportService = new BookingReportService();
 
-        // Add services
-        manager.addService(reservationId, breakfast);
-        manager.addService(reservationId, spa);
+        // Display bookings
+        reportService.displayAllBookings(history);
 
-        // Calculate cost
-        double totalCost = manager.calculateTotalServiceCost(reservationId);
-
-        System.out.println("Reservation ID: " + reservationId);
-        System.out.println("Total Add-On Cost: " + totalCost);
+        // Generate summary
+        reportService.generateSummaryReport(history);
     }
 }
