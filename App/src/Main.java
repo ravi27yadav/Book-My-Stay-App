@@ -1,37 +1,36 @@
 /**
  * =============================================================
- * MAIN CLASS - UseCase6RoomAllocation
+ * MAIN CLASS - UseCase7AddOnServiceSelection
  * =============================================================
  *
- * Use Case 6: Reservation Confirmation & Room Allocation
+ * Use Case 7: Add-On Service Selection
  *
- * @version 6.0
+ * @version 7.0
  */
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("Room Allocation Processing");
+        System.out.println("Add-On Service Selection");
 
-        // Inventory (UC3)
-        RoomInventory inventory = new RoomInventory();
+        // Example reservation ID (from UC6)
+        String reservationId = "Single-1";
 
-        // Queue (UC5)
-        BookingRequestQueue queue = new BookingRequestQueue();
+        // Service manager
+        AddOnServiceManager manager = new AddOnServiceManager();
 
-        // Add booking requests
-        queue.addRequest(new Reservation("Abhi", "Single"));
-        queue.addRequest(new Reservation("Subha", "Single"));
-        queue.addRequest(new Reservation("Vanmathi", "Suite"));
+        // Create services
+        AddOnService breakfast = new AddOnService("Breakfast", 500.0);
+        AddOnService spa = new AddOnService("Spa", 1000.0);
 
-        // Allocation service
-        RoomAllocationService allocationService =
-                new RoomAllocationService();
+        // Add services
+        manager.addService(reservationId, breakfast);
+        manager.addService(reservationId, spa);
 
-        // Process queue (FIFO)
-        while (queue.hasPendingRequests()) {
-            Reservation r = queue.getNextRequest();
-            allocationService.allocateRoom(r, inventory);
-        }
+        // Calculate cost
+        double totalCost = manager.calculateTotalServiceCost(reservationId);
+
+        System.out.println("Reservation ID: " + reservationId);
+        System.out.println("Total Add-On Cost: " + totalCost);
     }
 }
