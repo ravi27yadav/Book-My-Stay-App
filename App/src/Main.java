@@ -1,40 +1,37 @@
 /**
  * =============================================================
- * MAIN CLASS - UseCase5BookingRequestQueue
+ * MAIN CLASS - UseCase6RoomAllocation
  * =============================================================
  *
- * Use Case 5: Booking Request (FIFO)
+ * Use Case 6: Reservation Confirmation & Room Allocation
  *
- * @version 5.0
+ * @version 6.0
  */
 public class Main {
 
     public static void main(String[] args) {
 
-        // Header
-        System.out.println("Booking Request Queue");
+        System.out.println("Room Allocation Processing");
 
-        // Initialize queue
-        BookingRequestQueue bookingQueue = new BookingRequestQueue();
+        // Inventory (UC3)
+        RoomInventory inventory = new RoomInventory();
 
-        // Create reservations
-        Reservation r1 = new Reservation("Abhi", "Single");
-        Reservation r2 = new Reservation("Subha", "Double");
-        Reservation r3 = new Reservation("Vanmathi", "Suite");
+        // Queue (UC5)
+        BookingRequestQueue queue = new BookingRequestQueue();
 
-        // Add to queue
-        bookingQueue.addRequest(r1);
-        bookingQueue.addRequest(r2);
-        bookingQueue.addRequest(r3);
+        // Add booking requests
+        queue.addRequest(new Reservation("Abhi", "Single"));
+        queue.addRequest(new Reservation("Subha", "Single"));
+        queue.addRequest(new Reservation("Vanmathi", "Suite"));
 
-        // Process in FIFO order
-        while (bookingQueue.hasPendingRequests()) {
-            Reservation r = bookingQueue.getNextRequest();
+        // Allocation service
+        RoomAllocationService allocationService =
+                new RoomAllocationService();
 
-            System.out.println("Processing booking for Guest: "
-                    + r.getGuestName()
-                    + ", Room Type: "
-                    + r.getRoomType());
+        // Process queue (FIFO)
+        while (queue.hasPendingRequests()) {
+            Reservation r = queue.getNextRequest();
+            allocationService.allocateRoom(r, inventory);
         }
     }
 }
