@@ -1,33 +1,49 @@
 /**
  * =============================================================
- * MAIN CLASS - UseCase8BookingHistoryReport
+ * MAIN CLASS - UseCase9ErrorHandlingValidation
  * =============================================================
  *
- * Use Case 8: Booking History & Reporting
+ * Use Case 9: Error Handling & Validation
  *
- * @version 8.0
+ * @version 9.0
  */
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("Booking History & Report\n");
+        System.out.println("Error Handling & Validation\n");
 
-        // Booking history
-        BookingHistory history = new BookingHistory();
+        // Inventory
+        RoomInventory inventory = new RoomInventory();
 
-        // Simulate confirmed bookings (from UC6)
-        history.addBooking(new Reservation("Abhi", "Single"));
-        history.addBooking(new Reservation("Subha", "Single"));
-        history.addBooking(new Reservation("Vanmathi", "Suite"));
+        // Validator
+        BookingValidator validator = new BookingValidator();
 
-        // Report service
-        BookingReportService reportService = new BookingReportService();
+        // Test cases (valid + invalid)
+        Reservation r1 = new Reservation("Abhi", "Single");   // valid
+        Reservation r2 = new Reservation("", "Double");       // invalid name
+        Reservation r3 = new Reservation("Ravi", "Deluxe");   // invalid type
 
-        // Display bookings
-        reportService.displayAllBookings(history);
+        processBooking(r1, inventory, validator);
+        processBooking(r2, inventory, validator);
+        processBooking(r3, inventory, validator);
+    }
 
-        // Generate summary
-        reportService.generateSummaryReport(history);
+    /**
+     * Process booking with validation
+     */
+    public static void processBooking(Reservation r,
+                                      RoomInventory inventory,
+                                      BookingValidator validator) {
+
+        try {
+            validator.validate(r, inventory);
+            System.out.println("Booking valid for Guest: "
+                    + r.getGuestName()
+                    + ", Room Type: " + r.getRoomType());
+
+        } catch (InvalidBookingException e) {
+            System.out.println("Booking failed: " + e.getMessage());
+        }
     }
 }
